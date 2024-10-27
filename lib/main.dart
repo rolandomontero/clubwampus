@@ -67,23 +67,24 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void _showSnackBar(BuildContext context) {
+  void _showSnackBar(BuildContext context, String mensaje) {
     setState(() {
       btnQR = false; // Desactiva btnQR al mostrar el Snackbar
     });
 
-    ScaffoldMessenger.of(context)
+    ScaffoldMessenger
+        .of(context)
         .showSnackBar(
-           SnackBar(
-            backgroundColor: wampus,
-            content: Text(
-              qrCodeData ,
-              textAlign: TextAlign.center,
-            ),
-            duration: Duration(seconds: 5),
-            elevation: 10.0,
-          ),
-        )
+      SnackBar(
+        backgroundColor: wampus,
+        content: Text(
+          mensaje,
+          textAlign: TextAlign.center,
+        ),
+        duration: Duration(seconds: 5),
+        elevation: 10.0,
+      ),
+    )
         .closed
         .then((_) {
       setState(() {
@@ -94,7 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+    final height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     return Scaffold(
       appBar: AppBar(
@@ -108,75 +112,91 @@ class _MyHomePageState extends State<MyHomePage> {
               color: wampus,
             ),
             onPressed: () {
-              _showSnackBar(context);
+              _showSnackBar(context, 'Hola');
             },
           ),
         ],
         flexibleSpace: SafeArea(
             child: Row(
-          children: [
-            Image.asset(
-              'assets/images/logo.png',
-              width: 147,
-              height: 60,
-              fit: BoxFit.cover,
-            ),
-            const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Bienvenido',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      backgroundColor: Colors.black,
-                      color: Colors.white,
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.bold),
+                Image.asset(
+                  'assets/images/logo.png',
+                  width: 147,
+                  height: 60,
+                  fit: BoxFit.cover,
                 ),
-                Text(
-                  'Rolando Montero',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    backgroundColor: Colors.black,
-                    color: Colors.white,
-                    fontSize: 14.0,
-                  ),
+                const Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Bienvenido',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          backgroundColor: Colors.black,
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Rolando Montero',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        backgroundColor: Colors.black,
+                        color: Colors.white,
+                        fontSize: 14.0,
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
-        )),
+            )),
       ),
       body: selectedIndex == 2
-          ? QRView(showSnackBar: _showSnackBar)
+          ? QRView(
+
+          showSnackBarQR: (text) {
+            selectedIndex = 0;
+            Future.delayed(Duration.zero, () { // Retrasa la llamada a setState()
+              setState(() {
+
+                _showSnackBar(context, text); // Tu lógica para actualizar el estado
+              });
+            });
+
+
+      }
+      )
           : Center(
-              child: _widgetOptions.elementAt(selectedIndex),
-            ),
+        child: _widgetOptions.elementAt(selectedIndex),
+      ),
       floatingActionButton:
-          (MediaQuery.of(context).viewInsets.bottom <= height / 3) && btnQR
-              ? Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: b_wampus, width: 3.0),
-                  ),
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      setState(() {
-                        selectedIndex = 2;
-                      });
-                    },
-                    tooltip: 'QR Scann',
-                    shape: CircleBorder(),
-                    // elevation: 0,
-                    highlightElevation: 0,
-                    child: Icon(
-                      Icons.qr_code_2_rounded,
-                      size: 38,
-                    ),
-                  ),
-                )
-              : null,
+      (MediaQuery
+          .of(context)
+          .viewInsets
+          .bottom <= height / 3) && btnQR
+          ? Container(
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: b_wampus, width: 3.0),
+        ),
+        child: FloatingActionButton(
+          onPressed: () {
+            setState(() {
+              selectedIndex = 2;
+            });
+          },
+          tooltip: 'QR Scann',
+          shape: CircleBorder(),
+          // elevation: 0,
+          highlightElevation: 0,
+          child: Icon(
+            Icons.qr_code_2_rounded,
+            size: 38,
+          ),
+        ),
+      )
+          : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,

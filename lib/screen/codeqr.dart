@@ -4,9 +4,9 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:clubwampus/global_variables.dart';
 
 class QRView extends StatefulWidget {
-  final Function(string) showSnackBarQR; // Recibe la función
+  final Function(String) showSnackBarQR; // Recibe la función
 
-  const QRView({super.key, required this.showSnackBar});
+  const QRView({super.key, required this.showSnackBarQR});
 
   @override
   State<QRView> createState() => _QRViewState();
@@ -35,6 +35,7 @@ class _QRViewState extends State<QRView> {
         wmp = parts[0];
         number = parts[1];
         widget.showSnackBarQR('Bien!!! Ganaste $number Puntos');
+        _isCameraOn = false;
       }
     }
 
@@ -49,7 +50,7 @@ class _QRViewState extends State<QRView> {
     if (mounted) {
       setState(() {
         _barcode = barcodes.barcodes.firstOrNull;
-        _isCameraOn = false;
+
       });
     }
   }
@@ -58,6 +59,7 @@ class _QRViewState extends State<QRView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+
         children: <Widget>[
           Expanded(
             flex: 4,
