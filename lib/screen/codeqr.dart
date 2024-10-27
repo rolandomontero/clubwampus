@@ -4,7 +4,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:clubwampus/global_variables.dart';
 
 class QRView extends StatefulWidget {
-  final Function(BuildContext) showSnackBar; // Recibe la función
+  final Function(string) showSnackBarQR; // Recibe la función
 
   const QRView({super.key, required this.showSnackBar});
 
@@ -34,8 +34,7 @@ class _QRViewState extends State<QRView> {
         List<String> parts = displayValue.split('-');
         wmp = parts[0];
         number = parts[1];
-        qrCodeData  = 'Bien!!! Ganaste $number Puntos';
-       // widget.showSnackBar(context);
+        widget.showSnackBarQR('Bien!!! Ganaste $number Puntos');
       }
     }
 
