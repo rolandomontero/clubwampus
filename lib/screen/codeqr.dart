@@ -18,7 +18,6 @@ class _QRViewState extends State<QRView> {
 
   Widget _buildBarcode(Barcode? value) {
     String? displayValue;
-    String? wmp;
     String? number;
 
     if (value == null) {
@@ -32,7 +31,7 @@ class _QRViewState extends State<QRView> {
       // Separar el displayValue en dos variables
       if (displayValue != null && displayValue.contains('-')) {
         List<String> parts = displayValue.split('-');
-        wmp = parts[0];
+       
         number = parts[1];
         widget.showSnackBarQR('Bien!!! Ganaste $number Puntos');
         _isCameraOn = false;

@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:clubwampus/services/authentication.dart';
+
+
 
 class singuser extends StatefulWidget {
   const singuser({super.key});
@@ -13,6 +16,8 @@ class singuser extends StatefulWidget {
 
 class _singuserState extends State<singuser> {
   final _formKey = GlobalKey<FormState>();
+  final AuthMethod _authMethod = AuthMethod();
+
 
   // Controladores de texto
   final _nombreController = TextEditingController();
@@ -213,30 +218,38 @@ class _singuserState extends State<singuser> {
                   ),
                   const SizedBox(height: 18.0),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        // Si el formulario es válido, muestra los datos ingresados
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Datos Ingresados'),
-                            content: Text(
-                              'Nombre: ${_nombreController.text}\n'
-                              'Email: ${_emailController.text}\n'
-                              'Teléfono: ${_telefonoController.text}\n'
-                              'Fecha de Nacimiento: ${_fechaNacimiento != null ? DateFormat('dd-MM-yyyy', 'es').format(_fechaNacimiento!) : 'No seleccionada'}\n'
-                              'Domicilio: ${_domicilioController.text}',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          ),
+                    // Obtén los datos del formulario
+                        final nombre = _nombreController.text;
+                        final email = _emailController.text;
+                        final telefono = _telefonoController.text;
+                        final domicilio = _domicilioController.text;
+                        final fechaNacimiento = _fechaNacimiento;
+
+                        // Llama a signupUser() con los datos del formulario
+                        final result = await _authMethod.signupUser(
+                          nombre: nombre,
+                          email: email,
+                          telefono: telefono,
+                          domicilio: domicilio,
+                          fechaNacimiento: fechaNacimiento,
                         );
+
+                        // Maneja el resultado del registro
+                        if (result == 'success') {
+                          // Muestra un mensaje de éxito
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Registro exitoso')),
+                          );
+                          // Redirige a la pantalla de inicio de sesión
+                        //  Navigator.pushReplacementNamed(context, '/login');
+                        } else {
+                          // Muestra un mensaje de error
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Error: $result')),
+                          );
+                        }
                       }
                     },
                     child: const Text('Guardar'),
