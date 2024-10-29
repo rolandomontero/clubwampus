@@ -53,6 +53,41 @@ class _singuserState extends State<singuser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+        appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: Colors.black,
+          automaticallyImplyLeading: false,
+
+          flexibleSpace: SafeArea(
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/logo.png',
+                    width: 147,
+                    height: 60,
+                    fit: BoxFit.cover,
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Bienvenido',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            backgroundColor: Colors.black,
+                            color: Colors.white,
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+
+                    ],
+                  )
+                ],
+              )),
+        ),
+
         body: Container(
       // Wrap the entire body with Container
       height: double.infinity, // Make the container fill the screen
@@ -216,7 +251,7 @@ class _singuserState extends State<singuser> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 18.0),
+                  const SizedBox(height: 42.0),
                   ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
@@ -243,7 +278,8 @@ class _singuserState extends State<singuser> {
                             const SnackBar(content: Text('Registro exitoso')),
                           );
                           // Redirige a la pantalla de inicio de sesión
-                        //  Navigator.pushReplacementNamed(context, '/login');
+                         // Navigator.pushReplacementNamed(context, '/login');
+                          Navigator.pop(context);
                         } else {
                           // Muestra un mensaje de error
                           ScaffoldMessenger.of(context).showSnackBar(
