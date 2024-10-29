@@ -1,3 +1,4 @@
+import 'package:clubwampus/global/const.dart';
 import 'package:flutter/material.dart';
 
 class MyButtons extends StatelessWidget {
@@ -24,7 +25,7 @@ class MyButtons extends StatelessWidget {
                   Radius.circular(30),
                 ),
               ),
-              color: Colors.blue),
+              color: wampus),
           child: Text(
             text,
             style: const TextStyle(

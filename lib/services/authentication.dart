@@ -10,6 +10,10 @@ import 'dart:convert';
 class AuthMethod {
   late final Cliente _user;
 
+  Future<String> nombre() async {
+    return _user.nombre;
+  }
+
   Future<String> signupUser({
     required String nombre,
     required String email,
