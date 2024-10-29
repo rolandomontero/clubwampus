@@ -69,7 +69,9 @@ class _whatsappState extends State<whatsapp> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(
+            child: 
+            
+            SingleChildScrollView(
               padding: const EdgeInsets.all(12.0),
               child: Column(children: [
                 const SizedBox(height: 18),

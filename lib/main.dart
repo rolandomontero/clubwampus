@@ -11,6 +11,8 @@ import 'package:clubwampus/global_variables.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'login/loginuser.dart';
+
 void main() {
   runApp(
     const MyApp(),
@@ -68,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     if (registrado) {
       cliente = await _authMethod.loadMemory();
     }
-
     setState(() {});
   }
 
@@ -77,7 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
     whatsapp(),
     Menu(),
     Menu(),
-    singuser(),
+    LoginUser(),
   ];
 
   void _onItemTapped(int index) {
