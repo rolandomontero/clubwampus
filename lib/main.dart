@@ -1,7 +1,7 @@
 import 'package:clubwampus/model/cliente.dart';
 import 'package:clubwampus/screen/codeqr.dart';
 import 'package:clubwampus/screen/menu.dart';
-import 'package:clubwampus/login/singuser.dart';
+import 'package:clubwampus/login/profileuser.dart';
 import 'package:clubwampus/screen/whatsapp.dart';
 import 'package:clubwampus/services/authentication.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ import 'package:clubwampus/global_variables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login/loginuser.dart';
+import 'login/profileuser.dart';
 
 void main() {
   runApp(
@@ -73,12 +74,13 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Menu(),
-    whatsapp(),
-    Menu(),
-    Menu(),
-    LoginUser(),
+  static List<Widget> _widgetOptions = <Widget>[
+    const Menu(),
+    const whatsapp(),
+    const Menu(),
+    const Menu(),
+    ProfileUser(registrado: registrado,),
+    //LoginUser(),
   ];
 
   void _onItemTapped(int index) {

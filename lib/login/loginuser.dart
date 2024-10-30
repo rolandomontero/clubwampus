@@ -124,19 +124,24 @@ class _LoginUserState extends State<LoginUser> {
                                     final idCliente = _telefonoController.text;
                                     final result =
                                         await _authMethod.loginUser(idCliente);
-                                    print(idCliente);
-                                    print(result);
                                     if (result == 'success') {
-                                     cliente = await _authMethod.loadMemory();
-
-                                      print(cliente.nombre);
+                                      // Muestra un mensaje de éxito
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('Bienvenido!!!')),
+                                      );
 
                                     }
-                                    // Muestra un mensaje de éxito
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                          content: Text('Registro exitoso')),
-                                    );
+                                    else {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text('No fue posible ingresar ')),
+                                      );
+                                    }
+
+
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
