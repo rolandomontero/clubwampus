@@ -8,12 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class AuthMethod {
-  late final Cliente _user;
-
-  Future<String> nombre() async {
-    return _user.nombre;
-  }
-
+  late  Cliente _user;
   Future<String> signupUser({
     required String nombre,
     required String email,

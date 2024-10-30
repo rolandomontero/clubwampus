@@ -2,17 +2,13 @@ import 'package:clubwampus/model/cliente.dart';
 import 'package:clubwampus/screen/codeqr.dart';
 import 'package:clubwampus/screen/menu.dart';
 import 'package:clubwampus/login/profileuser.dart';
+import 'package:clubwampus/login/loginuser.dart';
 import 'package:clubwampus/screen/whatsapp.dart';
 import 'package:clubwampus/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:clubwampus/global/const.dart';
-import 'package:flutter_localizations/flutter_localizations.dart'; // Import this
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:clubwampus/global_variables.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'login/loginuser.dart';
-import 'login/profileuser.dart';
 
 void main() {
   runApp(
@@ -74,15 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {});
   }
 
-  static List<Widget> _widgetOptions = <Widget>[
-    const Menu(),
-    const whatsapp(),
-    const Menu(),
-    const Menu(),
-    ProfileUser(registrado: registrado,),
-    //LoginUser(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       selectedIndex = index;
@@ -116,6 +103,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _widgetOptions = <Widget>[
+      Menu(),
+      whatsapp(),
+      QRView(showSnackBarQR: (text) {
+        selectedIndex = 0;
+        Future.delayed(Duration.zero, () {
+          // Retrasa la llamada a setState()
+          setState(() {
+            _showSnackBar(context, text); // Tu lógica para actualizar el estado
+          });
+        });
+      }),
+      Menu(),
+      registrado
+          ? ProfileUser()
+          : LoginUser(
+              onLogin: (text) {
+                text=='Bienvenido'
+                    ? setState(() {
+                        selectedIndex = 0;
+                        _loadData();
+                        _showSnackBar(context, text);
+                      })
+                    : null;
+              },
+            ),
+    ];
     final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -170,20 +184,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         )),
       ),
-      body: selectedIndex == 2
-          ? QRView(showSnackBarQR: (text) {
-              selectedIndex = 0;
-              Future.delayed(Duration.zero, () {
-                // Retrasa la llamada a setState()
-                setState(() {
-                  _showSnackBar(
-                      context, text); // Tu lógica para actualizar el estado
-                });
-              });
-            })
-          : Center(
-              child: _widgetOptions.elementAt(selectedIndex),
-            ),
+      body: Center(
+        child: _widgetOptions.elementAt(selectedIndex),
+      ),
       floatingActionButton:
           (MediaQuery.of(context).viewInsets.bottom <= height / 3) && btnQR
               ? Container(

@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 class LoginUser extends StatefulWidget {
-  const LoginUser({super.key});
+  final Function(String) onLogin;
+  const LoginUser({super.key, required this.onLogin});
 
   @override
   State<LoginUser> createState() => _LoginUserState();
@@ -35,7 +36,7 @@ class _LoginUserState extends State<LoginUser> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(22.0),
               child: Container(
-                height: (MediaQuery.of(context).size.height) / 3,
+                height: (MediaQuery.of(context).size.height) / 2.5,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.8),
                   borderRadius: BorderRadius.circular(14.0),
@@ -92,6 +93,7 @@ class _LoginUserState extends State<LoginUser> {
                                   ),
                                 ),
                                 keyboardType: TextInputType.phone,
+                                style: TextStyle(fontSize: 24.0),
                                 validator: (value) {
                                   if (value == null ||
                                       value.isEmpty ||
@@ -114,7 +116,7 @@ class _LoginUserState extends State<LoginUser> {
                             const Spacer(), // Espacio antes del botón
                             SizedBox(
                               width: MediaQuery.of(context).size.width /
-                                  3, // 1/3 del ancho de la pantalla
+                                  2.5, // 1/3 del ancho de la pantalla
                               child: ElevatedButton(
                                 onPressed: () async {
                                   setState(() {
@@ -125,23 +127,11 @@ class _LoginUserState extends State<LoginUser> {
                                     final result =
                                         await _authMethod.loginUser(idCliente);
                                     if (result == 'success') {
-                                      // Muestra un mensaje de éxito
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('Bienvenido!!!')),
-                                      );
-
+                                      widget.onLogin("Bienvenido");
                                     }
-                                    else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                            content: Text('No fue posible ingresar ')),
-                                      );
-                                    }
-
-
+                                  } else {
+                                    // No fue posible ingresar
+                                    widget.onLogin("No fue posible ingresar.");
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -163,7 +153,7 @@ class _LoginUserState extends State<LoginUser> {
                             const Spacer(),
                           ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 25.0),
                         Padding(
                           padding: const EdgeInsets.only(top: 10),
                           child: Row(
