@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:clubwampus/global/const.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:clubwampus/global_variables.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(
@@ -53,19 +54,21 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final AuthMethod _authMethod = AuthMethod();
-  late final Cliente cliente;
+
+  String nombre = '';
+  String idCliente = '';
 
   @override
   void initState() {
     super.initState();
-
     _loadData();
   }
 
   Future<void> _loadData() async {
     registrado = await _authMethod.registrado();
     if (registrado) {
-      cliente = await _authMethod.loadMemory();
+      nombre = await _authMethod.nombre();
+      idCliente = await _authMethod.idCliente();
     }
     setState(() {});
   }
@@ -88,6 +91,10 @@ class _MyHomePageState extends State<MyHomePage> {
             content: Text(
               mensaje,
               textAlign: TextAlign.center,
+              style: GoogleFonts.acme(
+                color: Colors.white,
+                fontSize: 18.0,
+              ),
             ),
             duration: Duration(seconds: 5),
             elevation: 10.0,
@@ -103,28 +110,39 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> _widgetOptions = <Widget>[
+    final List<Widget> widgetOptions = <Widget>[
       Menu(),
       whatsapp(),
       QRView(showSnackBarQR: (text) {
         selectedIndex = 0;
-        Future.delayed(Duration.zero, () {
-          // Retrasa la llamada a setState()
+        Future.delayed(Duration.zero, () async {
           setState(() {
-            _showSnackBar(context, text); // Tu lógica para actualizar el estado
+            _showSnackBar(context, text);
           });
+          await _authMethod.enviarPuntos(idCliente, 35);
         });
       }),
       Menu(),
       registrado
-          ? ProfileUser()
+          ? ProfileUser(outLogin: (text) {
+              setState(() async {
+                selectedIndex = 0;
+                nombre = await _authMethod.nombre();
+                _showSnackBar(context, text);
+              });
+            })
           : LoginUser(
               onLogin: (text) {
-                text=='Bienvenido'
+                text == 'Bienvenido'
                     ? setState(() {
                         selectedIndex = 0;
                         _loadData();
-                        _showSnackBar(context, text);
+
+                        Future.delayed(Duration.zero, () {
+                          setState(() {
+                            _showSnackBar(context, 'Bienvenido\n 🖖 $nombre');
+                          });
+                        });
                       })
                     : null;
               },
@@ -171,7 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  registrado ? cliente.nombre : 'Invitado',
+                  registrado ? nombre : 'Invitado',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     backgroundColor: Colors.black,
@@ -185,7 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
         )),
       ),
       body: Center(
-        child: _widgetOptions.elementAt(selectedIndex),
+        child: widgetOptions.elementAt(selectedIndex),
       ),
       floatingActionButton:
           (MediaQuery.of(context).viewInsets.bottom <= height / 3) && btnQR

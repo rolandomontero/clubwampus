@@ -1,7 +1,6 @@
-import 'package:clubwampus/global/const.dart';
+import 'package:clubwampus/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:clubwampus/global_variables.dart';
 
 class QRView extends StatefulWidget {
   final Function(String) showSnackBarQR; // Recibe la función
@@ -16,22 +15,24 @@ class _QRViewState extends State<QRView> {
   Barcode? _barcode;
   bool _isCameraOn = true; // Estado de la cámara
 
+  
+
   Widget _buildBarcode(Barcode? value) {
     String? displayValue;
     String? number;
 
     if (value == null) {
       return const Text(
-        'Scan QR code',
+        'Acerca la cámara\nal código QR',
         overflow: TextOverflow.fade,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
       );
     } else {
       displayValue = value.displayValue;
       // Separar el displayValue en dos variables
       if (displayValue != null && displayValue.contains('-')) {
         List<String> parts = displayValue.split('-');
-       
+
         number = parts[1];
         widget.showSnackBarQR('Bien!!! Ganaste $number Puntos');
         _isCameraOn = false;
@@ -49,7 +50,6 @@ class _QRViewState extends State<QRView> {
     if (mounted) {
       setState(() {
         _barcode = barcodes.barcodes.firstOrNull;
-
       });
     }
   }
@@ -58,7 +58,6 @@ class _QRViewState extends State<QRView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-
         children: <Widget>[
           Expanded(
             flex: 4,
@@ -79,9 +78,9 @@ class _QRViewState extends State<QRView> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: Container(
-                    alignment: Alignment.bottomCenter,
-                    height: 100,
-                    color: Colors.black.withOpacity(0.4),
+                    alignment: Alignment.topCenter,
+                    height: 120,
+                    color: Colors.black.withOpacity(0.7),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [

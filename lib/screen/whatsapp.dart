@@ -160,6 +160,17 @@ class _whatsappState extends State<whatsapp> {
                                 child: ElevatedButton(
                                   onPressed: _submitForm,
                                   child: const Text('Enviar'),
+                                  style: ElevatedButton.styleFrom(
+                                    textStyle: const TextStyle(
+                                      fontSize: 18, //fontWeight: FontWeight.bold
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20), // Agrega bordes redondeados
+                                    ),
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: wsp_wampus,
+                                  ),
                                 ),
                               ),
                             ],

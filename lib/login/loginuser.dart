@@ -7,6 +7,7 @@ import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 
 class LoginUser extends StatefulWidget {
   final Function(String) onLogin;
+
   const LoginUser({super.key, required this.onLogin});
 
   @override
