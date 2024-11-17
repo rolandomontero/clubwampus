@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:clubwampus/global/const.dart';
 import 'package:clubwampus/model/cliente.dart';
+import 'package:clubwampus/model/premio.dart';
 import 'package:clubwampus/model/puntos.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
@@ -191,7 +192,7 @@ class AuthMethod {
 
       final url = Uri.parse(ruta);
       final response = await http.post(url);
-      print('\n \n $url \n \n $response \n \n');
+
       if (response.statusCode == 201) {
         guardado = true;
       } else {
@@ -199,8 +200,21 @@ class AuthMethod {
       }
       return guardado;
     } catch (e) {
-      print('Error: $e');
+      if (kDebugMode) {
+        print('Error: $e');
+      }
       return false;
     }
   }
+
+// Función para  obtener las lista de Premios
+  static Future<List<Premio>> getPremios() async {
+    final response = await http.get(Uri.parse(uPremios));
+    final data = jsonDecode(response.body);
+   // print(data);
+    return data.map<Premio>((json) => Premio.fromJson(json)).toList();
+  }
+
+
+
 }

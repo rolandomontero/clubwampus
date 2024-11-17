@@ -1,4 +1,3 @@
-import 'package:clubwampus/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
@@ -15,34 +14,34 @@ class _QRViewState extends State<QRView> {
   Barcode? _barcode;
   bool _isCameraOn = true; // Estado de la cámara
 
-  
-
   Widget _buildBarcode(Barcode? value) {
     String? displayValue;
-    String? number;
 
     if (value == null) {
       return const Text(
         'Acerca la cámara\nal código QR',
         overflow: TextOverflow.fade,
-        style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+        style: TextStyle(
+            color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+             textAlign: TextAlign.center,
       );
     } else {
       displayValue = value.displayValue;
       // Separar el displayValue en dos variables
       if (displayValue != null && displayValue.contains('-')) {
         List<String> parts = displayValue.split('-');
-
-        number = parts[1];
-        widget.showSnackBarQR('Bien!!! Ganaste $number Puntos');
+        if(parts[0]=='wmp') {
+           widget.showSnackBarQR(parts[1]);
         _isCameraOn = false;
+        }
+       
       }
     }
 
     return Text(
-      qrCodeData ?? 'No display value.',
+      'Ingresa un código Válido',
       overflow: TextOverflow.fade,
-      style: const TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),
     );
   }
 

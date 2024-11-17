@@ -1,5 +1,5 @@
-import 'package:clubwampus/model/cliente.dart';
 import 'package:clubwampus/screen/codeqr.dart';
+import 'package:clubwampus/screen/listapremios.dart';
 import 'package:clubwampus/screen/menu.dart';
 import 'package:clubwampus/login/profileuser.dart';
 import 'package:clubwampus/login/loginuser.dart';
@@ -45,7 +45,6 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -54,9 +53,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final AuthMethod _authMethod = AuthMethod();
-
-  String nombre = '';
-  String idCliente = '';
 
   @override
   void initState() {
@@ -96,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 fontSize: 18.0,
               ),
             ),
-            duration: Duration(seconds: 5),
+            duration: Duration(seconds: 3),
             elevation: 10.0,
           ),
         )
@@ -112,23 +108,47 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     final List<Widget> widgetOptions = <Widget>[
       Menu(),
-      whatsapp(),
-      QRView(showSnackBarQR: (text) {
-        selectedIndex = 0;
-        Future.delayed(Duration.zero, () async {
-          setState(() {
-            _showSnackBar(context, text);
-          });
-          await _authMethod.enviarPuntos(idCliente, 35);
+      whatsapp(
+        nombre: nombre,
+        enviado: (enviado) {
+        setState(() {
+          selectedIndex = 0;
         });
       }),
-      Menu(),
+      registrado
+          ? QRView(showSnackBarQR: (number) {
+              selectedIndex = 0;
+              (indexQR == 1)
+                  ? Future.delayed(Duration.zero, () async {
+                      var enviado = await _authMethod.enviarPuntos(
+                          idCliente, int.parse(number));
+
+                      String mensaje = enviado
+                          ? 'Bien!!! Ganaste $number Puntos'
+                          : 'Intente después';
+                      setState(() {
+                        _showSnackBar(context, mensaje);
+                      });
+                     // indexQR = 0;
+                    })
+                  : indexQR++;
+            })
+          : Menu(),
+      ListPremios(
+        cobraPremio: (text) {
+          setState(() {
+            //_showSnackBar(context, text);
+          });
+        },
+      ),
       registrado
           ? ProfileUser(outLogin: (text) {
-              setState(() async {
+              setState(() {
                 selectedIndex = 0;
-                nombre = await _authMethod.nombre();
+                nombre = 'Invitado';
                 _showSnackBar(context, text);
+                btnQR = false;
+                registrado = false;
               });
             })
           : LoginUser(
@@ -205,8 +225,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: widgetOptions.elementAt(selectedIndex),
       ),
+ 
       floatingActionButton:
-          (MediaQuery.of(context).viewInsets.bottom <= height / 3) && btnQR
+          (MediaQuery.of(context).viewInsets.bottom <= height / 3) &&
+                  btnQR &&
+                  registrado
               ? Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,

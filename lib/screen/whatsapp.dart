@@ -3,7 +3,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:clubwampus/global/const.dart';
 
 class whatsapp extends StatefulWidget {
-  const whatsapp({super.key});
+  final Function(bool) enviado;
+  final String nombre;
+  const whatsapp({super.key, required this.enviado, required this.nombre});
 
   @override
   State<whatsapp> createState() => _whatsappState();
@@ -28,7 +30,7 @@ class _whatsappState extends State<whatsapp> {
 
   Future<void> _submitForm() async {
     String? asunto = _selectedAsunto;
-    String nombre = 'Rolando';
+    String nombre = widget.nombre;
     String? mensaje = _comentarioController.text;
 
     final whatsappURL = Uri.parse(
@@ -43,17 +45,12 @@ class _whatsappState extends State<whatsapp> {
       _formKey.currentState!.save();
       if (await canLaunchUrl(whatsappURL)) {
         await launchUrl(whatsappURL);
+        widget.enviado(true);
       } else {
         // Manejar el caso en que WhatsApp no esté instalado
         print('No se pudo abrir WhatsApp.');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('No se pudo enviar')),
-        );
+        widget.enviado(false);
       }
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Formulario enviado con éxito')),
-      );
     }
   }
 
@@ -69,9 +66,7 @@ class _whatsappState extends State<whatsapp> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: 
-            
-            SingleChildScrollView(
+            child: SingleChildScrollView(
               padding: const EdgeInsets.all(12.0),
               child: Column(children: [
                 const SizedBox(height: 18),
@@ -97,7 +92,6 @@ class _whatsappState extends State<whatsapp> {
                         child: Form(
                           key: _formKey,
                           child: Column(
-                             
                             children: [
                               const Text(
                                 '  💬 ENVIAR MENSAJE 💬',
@@ -162,7 +156,8 @@ class _whatsappState extends State<whatsapp> {
                                   child: const Text('Enviar'),
                                   style: ElevatedButton.styleFrom(
                                     textStyle: const TextStyle(
-                                      fontSize: 18, //fontWeight: FontWeight.bold
+                                      fontSize:
+                                          18, //fontWeight: FontWeight.bold
                                     ),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(

@@ -5,6 +5,7 @@ import 'package:clubwampus/services/authentication.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileUser extends StatefulWidget {
   final Function(String) outLogin;
@@ -39,6 +40,7 @@ class _ProfileUserState extends State<ProfileUser> {
 
   Future<void> _loadData() async {
     registrado = await _authMethod.registrado();
+    print('Esta registrado $registrado');
     if (registrado) {
       cliente = await _authMethod.loadMemory();
       totalPuntos = await _authMethod.total(cliente.id_cliente);
@@ -65,7 +67,7 @@ class _ProfileUserState extends State<ProfileUser> {
                     : SingleChildScrollView(
                         padding: const EdgeInsets.all(22.0),
                         child: Container(
-                          height: (MediaQuery.of(context).size.height) / 2,
+                          height: (MediaQuery.of(context).size.height)*0.55,
                           decoration: BoxDecoration(
                             color: Colors.white.withOpacity(0.8),
                             borderRadius: BorderRadius.circular(14.0),
@@ -91,7 +93,7 @@ class _ProfileUserState extends State<ProfileUser> {
                                     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 22.0),
-                              Text(
+                              Text( 
                                 cliente.nombre,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.acme(
@@ -100,17 +102,15 @@ class _ProfileUserState extends State<ProfileUser> {
                                     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 2.0),
-                              Text(
-                                cliente.correo,
+                              Text('📧 ${cliente.correo}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 2.0),
-                              Text(
-                                DateFormat('dd MMM yyyy')
-                                    .format(DateTime.parse(cliente.nacimiento)),
+                              Text('🥳 ${DateFormat('dd MMM yyyy')
+                                    .format(DateTime.parse(cliente.nacimiento))}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 18.0,
@@ -153,22 +153,8 @@ class _ProfileUserState extends State<ProfileUser> {
                                   const Spacer(),
                                 ],
                               ),
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                child: ElevatedButton(
-                                  onPressed: () async {},
-                                  style: ElevatedButton.styleFrom(
-                                    textStyle: const TextStyle(
-                                      fontSize:
-                                          18, //fontWeight: FontWeight.bold
-                                    ),
-                                  ),
-                                  child: Text(
-                                      'Tienes ⭐ ${totalPuntos.toString()} puntos'),
-                                ),
-                                // ... tu código del ElevatedButton ...
-                              ),
                               const SizedBox(height: 8),
+                              // Cerrar Sesión
                               Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: Row(
@@ -193,6 +179,60 @@ class _ProfileUserState extends State<ProfileUser> {
                                 ),
                               ),
                               const SizedBox(height: 18),
+                              // Sistema de Premiación
+                              Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        await launchUrl(Uri.parse(
+                                            'https://wampus.mclautaro.cl/sistema-premiacion'));
+                                        //sistema-premiacion.php
+                                      },
+                                      child: const Text(
+                                        "Sistema de Premiación",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: txt_wampus,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 5),
+
+                              // Políticas de privacidad
+Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                         
+                                      await launchUrl(Uri.parse(
+                                          'https://wampus.mclautaro.cl/politicas-privacidad'));
+                                      //sistema-premiacion.php
+                                    },
+                                      child: const Text(
+                                        "Políticas de Privacidad",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: txt_wampus,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+ 
+
+                              const SizedBox(height: 32),
+                               
                             ],
                           ),
                         ),

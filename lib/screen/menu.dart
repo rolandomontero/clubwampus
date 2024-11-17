@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
 class Menu extends StatefulWidget {
   const Menu({super.key});
 
@@ -12,12 +11,10 @@ class Menu extends StatefulWidget {
 }
 
 class _MenuState extends State<Menu> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       body: Container(
+      body: Container(
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/fondo1.png'),
@@ -30,7 +27,7 @@ class _MenuState extends State<Menu> {
             ),
             CarouselSlider(
               options: CarouselOptions(
-                height: 350, // Altura como el 30% de la pantalla
+                height: 400, // Altura como el 30% de la pantalla
                 viewportFraction: 0.8,
                 autoPlay: true,
                 autoPlayInterval: const Duration(seconds: 10),
@@ -42,7 +39,7 @@ class _MenuState extends State<Menu> {
                   'bocados': '24 bocados',
                   'ingrediente':
                       '* Makisushi (Palta o salmón) \n * 1 california rolls (semillas mix) \n * Hosomaki',
-                  'precio': ' \$ 13.900',
+                  'precio': ' \$ 14.900',
                 },
                 {
                   'imagePath': 'assets/images/tablas/tabla2.png',
@@ -50,7 +47,7 @@ class _MenuState extends State<Menu> {
                   'bocados': '24 bocados',
                   'ingrediente':
                       '* Makisushi (Palta o salmón) \n * 1 california rolls (semillas mix) \n * Hosomaki',
-                  'precio': ' \$ 13.900',
+                  'precio': ' \$ 24.900',
                 },
                 {
                   'imagePath': 'assets/images/tablas/tabla3.png',
@@ -58,7 +55,31 @@ class _MenuState extends State<Menu> {
                   'bocados': '50 bocados',
                   'ingrediente':
                       '* Makisushi (Palta o salmón) \n * 1 california rolls (semillas mix) \n * Hosomaki',
-                  'precio': ' \$ 13.900',
+                  'precio': ' \$ 32.900',
+                },
+                {
+                  'imagePath': 'assets/images/tablas/tablacaliente.png',
+                  'tabla': 'Tabla Caliente',
+                  'bocados': '23 bocados',
+                  'ingrediente':
+                      '* 8 Kookes \n * 1 Panko Camarón \n * 6 Camarones apanados',
+                  'precio': ' \$ 20.900',
+                },
+                {
+                  'imagePath': 'assets/images/tablas/tablawampus.png',
+                  'tabla': 'Tabla wampus',
+                  'bocados': '33 bocados',
+                  'ingrediente':
+                      '* Makisushi (Palta o salmón) \n * 6 Kookes \n * 1 Panko Camarón  \n * 1 roll de la casa (Palta o salmón)',
+                  'precio': ' \$ 28.900',
+                },
+                {
+                  'imagePath': 'assets/images/tablas/tablanigiris.png',
+                  'tabla': 'Tabla Nigiris',
+                  'bocados': '12 bocados',
+                  'ingrediente':
+                      '* 2 Nigiris chango  * 2 Nigiris Atún \n * 2 Nigiris Camarón  * 2 Nigiris masago \n * 2 Nigiris Skanakataki\n * 2 Nigiris Salmón',
+                  'precio': ' \$ 17.900',
                 },
               ].map((Map<String, String> data) {
                 return Builder(
@@ -110,14 +131,16 @@ class _MenuState extends State<Menu> {
                                 fontSize: 14.0,
                               ),
                             ),
+                            const Spacer(),
                             Text(
                               data['precio']!,
                               textAlign: TextAlign.right,
-                              style: const TextStyle(
+                              style: GoogleFonts.acme(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
+                                fontSize: 22.0,
                               ),
                             ),
+                            const SizedBox(height: 12.0),
                           ],
                         ),
                       ),
@@ -127,7 +150,6 @@ class _MenuState extends State<Menu> {
               }).toList(),
             ),
           ])),
-
     );
   }
 }
